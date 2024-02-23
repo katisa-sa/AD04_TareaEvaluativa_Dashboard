@@ -1,0 +1,7 @@
+{
+  "name": "DI04_TareaEvaluativa_Dashboard",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
