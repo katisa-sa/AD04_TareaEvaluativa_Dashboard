@@ -1,3 +1,30 @@
-<div id="contenedor-barchart" style="width: 100%; max-width: 950px; height: 750px; margin: auto; text-align: center;">
-  <!--<canvas id="barChart">{{ chart }}</canvas>-->
-</div>
+
+<ion-content [fullscreen]="true">
+  <!-- Mostrar u ocultar componentes según el segmento seleccionado -->
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <div id="contenedor-barchart" style="width: 100%; max-width: 950px; height: 750px; margin: auto; text-align: center;">
+          <!--<canvas id="barChart">{{ chart }}</canvas>-->
+        </div>
+      </ion-col>
+      <ion-col size="6">
+        <ion-row>
+          <ion-col size="12">
+            <div id="contenedor-linechart" style="width: 100%; max-width: 950px; height: 750px; margin: auto; text-align: center;">
+              <!--<canvas id="barChart">{{ chart }}</canvas>-->
+            </div>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
+            <div id="contenedor-piechart" style="width: 100%; max-width: 950px; height: 750px; margin: auto; text-align: center;">
+              <!--<canvas id="barChart">{{ chart }}</canvas>-->
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
