@@ -10,6 +10,7 @@ import { GestionApiService } from 'src/app/services/gestion-api.service';
 export class BartChartComponent  implements OnInit {
 
   //Estas variables se reciben como parámetro desde tab6, pero no desde tab7.
+  @Input() categoria: string[] = [];
   @Input() datosCategorias: number[] = [];
   @Input() nombresCategorias: string[] = [];
   //Estas variables se reciben como parámetro de home
@@ -18,6 +19,7 @@ export class BartChartComponent  implements OnInit {
   @Input() tipoChartSelected: string = "";
 
   public chart!: Chart;
+  public apiData: { categoria: string; totalResults: number}[]=[];
 
   constructor(private el: ElementRef, private renderer: Renderer2, private gestionServiceApi: GestionApiService) {}
  
@@ -67,7 +69,10 @@ export class BartChartComponent  implements OnInit {
   
     this.chart = new Chart(canvas, {
       type: 'bar' as ChartType, // tipo de la gráfica 
-      data: data, // datos 
+      data: {
+        labels:[],
+        datasets: datasetsByCompany
+      }, // datos 
       options: { // opciones de la gráfica
         responsive: true,
         maintainAspectRatio: false,
@@ -89,9 +94,38 @@ export class BartChartComponent  implements OnInit {
         },
       }
     });
-  
+    
     this.chart.canvas.width = 100;
     this.chart.canvas.height = 100;
   }
+  private actualizarChart() {
+    const datasetsByCompany: {[key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number}} = {};
+    this.apiData.forEach((row: {categoria: string; totalResults: number;}, index: number);
+    const categoria = row.categoria;
+    const totalResults = row.totalResults;
+   
+      if(!datasetsByCompany[categoria]) = {
+        label: 'Valores de ' + this.datosCategorias,
+        data: [],
+        backgroundColor: [this.backgroundColorCategorias[index]],
+        borderColor: [this.borderColorCategorias[index]],
+        borderWidth: 1
+      };  
 
+      datasetsByCompany[categoria].data[index] = totalResults;
+      datasetsByCompany[categoria].backgroundColor[index] = this.backgroundColorCategorias[index];
+      datasetsByCompany[categoria].borderColor[index] = this.borderColorCategorias[index];
+      );
+
+      //this.chart.data.labels = this.apiData.map((row: { categoria: string; totalResults: number }) => row.categoria);
+
+      this.chart.data.labels = [];
+      this.apiData.forEach((row: { categoria: string; totalResults: number }) => {
+        if (this.chart.data.labels){
+         this.chart.data.labels.push(row.categoria);
+        }
+    });
+    this.chart.data.datasets = Object.values(datasetsByCompany);
+    this.chart.update(); 
+  }
 }
