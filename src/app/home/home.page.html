@@ -17,9 +17,9 @@
 </ion-segment>
 </ion-header>
 <ion-content [fullscreen]="true">
-<app-bar-chart  *ngIf="tipoDeChartSeleccionado === 'bar-chart'" [borderColorCat]="borderColorCat" [backgroundColorCat] = "backgroundColorCat"></app-bar-chart>
+<app-bar-chart  *ngIf="tipoDeChartSeleccionado === 'bar-chart'"></app-bar-chart>
 <!--En el segmento "Line-Chart" mostraremos únicamente su correspondiente gráfica-->
-<app-line-chart *ngIf="tipoDeChartSeleccionado === 'line-chart'" [borderColorCat]="borderColorCat" [backgroundColorCat] = "backgroundColorCat"></app-line-chart>
+<app-line-chart *ngIf="tipoDeChartSeleccionado === 'line-chart'"></app-line-chart>
 <!--En el segmento "Pie-Chart" mostraremos únicamente su correspondiente gráfica-->
-<app-pie-chart *ngIf="tipoDeChartSeleccionado === 'pie-chart'" [borderColorCat]="borderColorCat" [backgroundColorCat] = "backgroundColorCat"></app-pie-chart>
+<app-pie-chart *ngIf="tipoDeChartSeleccionado === 'pie-chart'"></app-pie-chart>
 </ion-content>

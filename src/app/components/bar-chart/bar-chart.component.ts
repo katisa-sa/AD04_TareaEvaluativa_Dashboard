@@ -3,11 +3,11 @@ import { Chart, ChartType } from 'chart.js';
 import { GestionApiService } from 'src/app/services/gestion-api.service';
 
 @Component({
-  selector: 'app-bart-chart',
-  templateUrl: './bart-chart.component.html',
-  styleUrls: ['./bart-chart.component.scss'],
+  selector: 'app-bar-chart',
+  templateUrl: './bar-chart.component.html',
+  styleUrls: ['./bar-chart.component.scss'],
 })
-export class BartChartComponent  implements OnInit {
+export class BarChartComponent  implements OnInit {
 
   //Estas variables se reciben como parámetro desde tab6, pero no desde tab7.
   @Input() categoria: string[] = [];
@@ -34,44 +34,47 @@ export class BartChartComponent  implements OnInit {
         this.nombresCategorias.push(datos.categoria);
         this.datosCategorias.push(datos.totalResults);
         //Actualizamos el chart con los nuevos valores cada vez que recibimos un valor.
-        this.chart.update();
+        this.actualizarChart();
       }
     });
   }
 
   private inicializarChart() {
-
-    let data = null;
-  
-    if (this.tipoChartSelected === "bar-chart"){
-      // datos
-      data = {
-        labels: this.nombresCategorias,
-        datasets: [{
-          label: 'My First Dataset',
-          data: this.datosCategorias,
-          fill: false,
-          backgroundColor: this.backgroundColorCategorias,
-          borderColor: this.borderColorCategorias,
-          tension: 0.1
-        }]
-      };
-    }
-    
-  
     // Creamos la gráfica
     const canvas = this.renderer.createElement('canvas');
     this.renderer.setAttribute(canvas, 'id', 'barChart');
-  
     // Añadimos el canvas al div con id "chartContainer"
     const container = this.el.nativeElement.querySelector('#contenedor-barchart');
     this.renderer.appendChild(container, canvas);
+
+    let datasetsByCompany: { [key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number } } = {};
   
+    this.apiData.forEach((row: {categoria: string; totalResults: number}, index: number) => {
+      const categoria = row.categoria;
+      const totalResults = row.totalResults;
+
+      if (!datasetsByCompany[categoria]) {
+        datasetsByCompany[categoria] = {
+          label: 'Valores de ' + categoria,
+          data: [],
+          backgroundColor: [],
+          borderColor: [],
+          borderWidth: 1
+        };
+      }
+
+      datasetsByCompany[categoria].data.push(totalResults);
+      datasetsByCompany[categoria].backgroundColor.push(this.backgroundColorCategorias[index]);
+      datasetsByCompany[categoria].borderColor.push(this.borderColorCategorias[index]);
+      this.nombresCategorias.push(categoria);
+      this.datosCategorias.push(totalResults);
+    });
+      
     this.chart = new Chart(canvas, {
       type: 'bar' as ChartType, // tipo de la gráfica 
       data: {
-        labels:[],
-        datasets: datasetsByCompany
+        labels: this.nombresCategorias,
+        datasets: Object.values(datasetsByCompany)
       }, // datos 
       options: { // opciones de la gráfica
         responsive: true,
@@ -95,37 +98,42 @@ export class BartChartComponent  implements OnInit {
       }
     });
     
-    this.chart.canvas.width = 100;
-    this.chart.canvas.height = 100;
+    //this.chart.canvas.width = 100;
+    //this.chart.canvas.height = 100;
   }
+
   private actualizarChart() {
-    const datasetsByCompany: {[key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number}} = {};
-    this.apiData.forEach((row: {categoria: string; totalResults: number;}, index: number);
+    const datasetsByCompany: { [key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number } } = {};
+    
+    this.apiData.forEach((row: {categoria: string; totalResults: number}, index: number)=>{
     const categoria = row.categoria;
     const totalResults = row.totalResults;
    
-      if(!datasetsByCompany[categoria]) = {
-        label: 'Valores de ' + this.datosCategorias,
+      if(!datasetsByCompany[categoria]){
+        datasetsByCompany[categoria] = {
+        label: 'Valores de ' + categoria,
         data: [],
         backgroundColor: [this.backgroundColorCategorias[index]],
         borderColor: [this.borderColorCategorias[index]],
         borderWidth: 1
-      };  
+      }; 
+      }
 
       datasetsByCompany[categoria].data[index] = totalResults;
       datasetsByCompany[categoria].backgroundColor[index] = this.backgroundColorCategorias[index];
       datasetsByCompany[categoria].borderColor[index] = this.borderColorCategorias[index];
-      );
+  });
 
-      //this.chart.data.labels = this.apiData.map((row: { categoria: string; totalResults: number }) => row.categoria);
+  //this.chart.data.labels = this.apiData.map((row: { categoria: string; totalResults: number }) => row.categoria);
 
-      this.chart.data.labels = [];
-      this.apiData.forEach((row: { categoria: string; totalResults: number }) => {
-        if (this.chart.data.labels){
-         this.chart.data.labels.push(row.categoria);
-        }
+  this.apiData.forEach((row: { categoria: string; totalResults: number }) => {
+      if (this.chart.data.labels){
+       this.chart.data.labels.push(row.categoria);
+      }
     });
-    this.chart.data.datasets = Object.values(datasetsByCompany);
-    this.chart.update(); 
+
+  this.chart.data.labels = [];
+  this.chart.data.datasets = Object.values(datasetsByCompany);
+  this.chart.update(); 
   }
 }
