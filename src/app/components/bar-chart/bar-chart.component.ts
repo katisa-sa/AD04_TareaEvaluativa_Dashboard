@@ -98,8 +98,8 @@ export class BarChartComponent  implements OnInit {
       }
     });
     
-    //this.chart.canvas.width = 100;
-    //this.chart.canvas.height = 100;
+    this.chart.canvas.width = 100;
+    this.chart.canvas.height = 100;
   }
 
   private actualizarChart() {

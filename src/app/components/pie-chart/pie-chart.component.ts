@@ -44,7 +44,7 @@ export class PieChartComponent  implements OnInit {
     const canvas = this.renderer.createElement('canvas');
     this.renderer.setAttribute(canvas, 'id', 'pieChart');
     // Añadimos el canvas al div con id "chartContainer"
-    const container = this.el.nativeElement.querySelector('#contenedor-barchart');
+    const container = this.el.nativeElement.querySelector('#contenedor-piechart');
     this.renderer.appendChild(container, canvas);
 
     let datasetsByCompany: { [key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number } } = {};
@@ -76,30 +76,11 @@ export class PieChartComponent  implements OnInit {
         labels: this.nombresCategorias,
         datasets: Object.values(datasetsByCompany)
       }, // datos 
-      options: { // opciones de la gráfica
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        },
-        plugins: {
-          legend: {
-            labels: {
-              boxWidth: 0,
-              font: {
-                size: 16,
-                weight: 'bold'
-              }
-            },
-          }
-        },
-      }
+
     });
     
-    this.chart.canvas.width = 100;
-    this.chart.canvas.height = 100;
+    //this.chart.canvas.width = 100;
+    //this.chart.canvas.height = 100;
   }
 
   private actualizarChart() {

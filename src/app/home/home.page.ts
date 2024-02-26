@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GestionApiService } from '../services/gestion-api.service';
 
 @Component({
   selector: 'app-home',
@@ -22,11 +23,17 @@ export class HomePage {
 
   tipoDeChartSeleccionado: string = "bar-chart";
 
-  constructor() {}
+  constructor(public gestionServiceApi: GestionApiService) {}
 
-  segmentChanged(event:any){
+  //Gestionamos el cambio de segmento
+  segmentChanged(event: any) {
+    //Recogemos el tipo de chart (bar-chart, line-chart o pie-chart), mediante event.detail.value
     this.tipoDeChartSeleccionado = event.detail.value;
+    //En caso de bar-chart, realizamos una llamada al api por cada categoria que tenemos.
+    if (this.tipoDeChartSeleccionado == "bar-chart"){
+      this.categoria.forEach(categoria => {
+        this.gestionServiceApi.cargarCategoria(categoria);
+      });
+    }
   }
-
-
 }

@@ -44,7 +44,7 @@ export class LineChartComponent  implements OnInit {
     const canvas = this.renderer.createElement('canvas');
     this.renderer.setAttribute(canvas, 'id', 'lineChart');
     // Añadimos el canvas al div con id "chartContainer"
-    const container = this.el.nativeElement.querySelector('#contenedor-barchart');
+    const container = this.el.nativeElement.querySelector('#contenedor-linechart');
     this.renderer.appendChild(container, canvas);
 
     let datasetsByCompany: { [key: string]: { label: string; data: number[]; backgroundColor: string[]; borderColor: string[]; borderWidth: number } } = {};
@@ -99,7 +99,7 @@ export class LineChartComponent  implements OnInit {
     });
     
     //this.chart.canvas.width = 100;
-    //this.chart.canvas.height = 100;
+   //this.chart.canvas.height = 100;
   }
 
   private actualizarChart() {
